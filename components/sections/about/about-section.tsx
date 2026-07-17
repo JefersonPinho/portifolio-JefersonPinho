@@ -1,133 +1,178 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
+import Image from "next/image";
+import { motion, type Variants } from "framer-motion";
+import { FiCode, FiDatabase, FiLayers } from "react-icons/fi";
+
 import { Container } from "@/components/layout/container";
 import { Card } from "@/components/ui/card";
-import { FiCode, FiZap, FiLayout, FiShield } from "react-icons/fi";
+import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 
 const highlights = [
   {
+    icon: FiLayers,
+    title: "Produtos SaaS",
+    description:
+      "Experiência com dashboards, CRMs e sistemas de gestão aplicados a operações reais.",
+  },
+  {
     icon: FiCode,
-    title: "Clean Architecture",
+    title: "Frontend e backend",
     description:
-      "Writing scalable, maintainable code with clear separation of concerns and strong TypeScript typing.",
+      "Interfaces responsivas, Server Actions, APIs, autenticação e regras de negócio.",
   },
   {
-    icon: FiZap,
-    title: "Performance First",
+    icon: FiDatabase,
+    title: "Dados e integrações",
     description:
-      "Achieving Lighthouse scores above 90 through optimized images, lazy loading, and critical path optimization.",
-  },
-  {
-    icon: FiLayout,
-    title: "Modern Tooling",
-    description:
-      "Leveraging the latest in the React ecosystem — Next.js App Router, Tailwind, Framer Motion — for premium results.",
-  },
-  {
-    icon: FiShield,
-    title: "Accessibility & SEO",
-    description:
-      "Building inclusive experiences with semantic HTML, ARIA attributes, and structured data for search engines.",
+      "Integração com bancos de dados, serviços externos, e-commerces e sistemas de gestão.",
   },
 ];
+
+const containerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 export function AboutSection() {
   const { ref, isInView } = useRevealAnimation();
 
   return (
-    <section id="about" className="py-24 lg:py-32">
+    <section
+      id="about"
+      aria-labelledby="about-title"
+      className="py-24 lg:py-28"
+    >
       <Container>
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
         >
           <div className="mb-4 flex items-center gap-3">
-            <span className="h-px w-12 bg-primary" />
-            <span className="font-mono text-sm text-primary">
+            <span aria-hidden="true" className="h-px w-12 bg-primary" />
+
+            <span className="font-mono text-sm font-medium text-primary">
               01. Sobre
             </span>
           </div>
 
-          <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-20">
-            <div>
-              <h2 className="font-display text-4xl font-bold tracking-tight sm:text-4xl">
-                Criando experiências digitais
-                <span className="text-primary">.</span>
+          <div className="grid items-center gap-10 lg:grid-cols-[320px_1fr] lg:gap-16">
+            <motion.div
+              variants={itemVariants}
+              className="relative mx-auto w-full max-w-[320px] lg:mx-0"
+            >
+              <div
+                aria-hidden="true"
+                className="absolute -inset-3 rounded-[28px] bg-primary/10 blur-2xl"
+              />
+
+              <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-card">
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src="/images/jeferson-pinho.jpeg"
+                    alt="Jeferson Pinho, desenvolvedor frontend"
+                    fill
+                    priority={false}
+                    sizes="(max-width: 1024px) 320px, 320px"
+                    className="object-cover object-[50%_35%]"
+                  />
+                </div>
+
+                <div className="border-t border-border/70 bg-card/90 px-5 py-4 backdrop-blur">
+                  <strong className="block font-display text-base font-semibold text-foreground">
+                    Jeferson Pinho
+                  </strong>
+
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    Desenvolvedor Frontend
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <h2
+                id="about-title"
+                className="max-w-2xl font-display text-4xl font-bold tracking-tight sm:text-5xl"
+              >
+                Desenvolvimento que vai além da{" "}
+                <span className="text-primary">interface.</span>
               </h2>
 
-              <div className="mt-6 space-y-4 leading-relaxed text-muted-foreground">
+              <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
                 <p>
-                  Sou Jeferson Pinho, desenvolvedor front-end focado em criar aplicativos web
-                  modernos e de alto desempenho. Minha abordagem combina
-                  arquitetura limpa, design cuidadoso e melhores práticas de
-                  engenharia para fornecer produtos que tenham ótima aparência e
-                  funcionem perfeitamente.
+                  Sou Desenvolvedor Frontend especializado em React, Next.js e
+                  TypeScript, com atuação também em APIs, autenticação, regras
+                  de negócio e banco de dados.
                 </p>
+
                 <p>
-                  I specialize in the React and Next.js ecosystem, with a strong
-                  emphasis on TypeScript, accessibility, and Core Web Vitals. I
-                  care deeply about code quality — every component is built to
-                  be reusable, tested, and maintainable.
-                </p>
-                <p>
-                  Currently building{" "}
-                  <a
-                    href="https://pastore.io"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-primary underline-offset-4 hover:underline"
-                  >
-                    Pastore.io
-                  </a>{" "}
-                  and taking on freelance projects with a focus on delivering
-                  measurable business outcomes through exceptional front-end
-                  engineering.
+                  Trabalho no desenvolvimento do Core Manager e do Pastore.io,
+                  além de criar sites, landing pages e e-commerces para
+                  empresas, acompanhando cada projeto da implementação ao
+                  deploy.
                 </p>
               </div>
-
-              <div className="mt-8 flex gap-4">
-                <a
-                  href="#contact"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document
-                      .getElementById("contact")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline"
-                >
-                  Let&apos;s work together →
-                </a>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {highlights.map(({ icon: Icon, title, description }, i) => (
-                <motion.div
-                  key={title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                >
-                  <Card hover className="h-full">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon size={18} className="text-primary" />
-                    </div>
-                    <h3 className="font-display font-semibold text-foreground">
-                      {title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {description}
-                    </p>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+            </motion.div>
           </div>
+
+          <motion.div
+            variants={containerVariants}
+            className="mt-14 grid gap-4 md:grid-cols-3"
+          >
+            {highlights.map(({ icon: Icon, title, description }) => (
+              <motion.div key={title} variants={itemVariants}>
+                <Card
+                  hover
+                  className="group h-full border-border/70 bg-card/60 p-6"
+                >
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <Icon
+                      size={19}
+                      aria-hidden="true"
+                      className="text-primary"
+                    />
+                  </div>
+
+                  <h3 className="font-display text-base font-semibold text-foreground">
+                    {title}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {description}
+                  </p>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </Container>
     </section>

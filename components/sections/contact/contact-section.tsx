@@ -1,196 +1,200 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
-import { Container } from "@/components/layout/container";
-import { Button } from "@/components/ui/button";
-import { FiGithub, FiLinkedin, FiMail, FiSend, FiCheck } from "react-icons/fi";
+import { motion, type Variants } from "framer-motion";
+import {
+  FiArrowUpRight,
+  FiGithub,
+  FiLinkedin,
+  FiMail,
+  FiMapPin,
+  FiMessageCircle,
+} from "react-icons/fi";
+import type { IconType } from "react-icons";
 
-const socialLinks = [
+import { Container } from "@/components/layout/container";
+import { useRevealAnimation } from "@/hooks/useRevealAnimation";
+
+type ContactLink = {
+  label: string;
+  value: string;
+  href: string;
+  icon: IconType;
+};
+
+const contactLinks: ContactLink[] = [
+  {
+    label: "E-mail",
+    value: "jefersonpinho.dev@gmail.com",
+    href: "mailto:jefersonpinho.dev@gmail.com?subject=Contato pelo portfólio",
+    icon: FiMail,
+  },
+  {
+    label: "WhatsApp",
+    value: "Conversar diretamente",
+    href: "https://wa.me/5585982255592?text=Olá%20Jeferson%2C%20vi%20seu%20portfólio%20e%20gostaria%20de%20conversar.",
+    icon: FiMessageCircle,
+  },
   {
     label: "LinkedIn",
+    value: "jefersonpinhodev",
     href: "https://linkedin.com/in/jefersonpinhodev",
     icon: FiLinkedin,
-    description: "Vamos nos conectar profissionalmente",
   },
   {
     label: "GitHub",
+    value: "JefersonPinho",
     href: "https://github.com/JefersonPinho",
     icon: FiGithub,
-    description: "Confira meu código",
-  },
-  {
-    label: "Email",
-    href: "mailto:jefersonpinho.dev@gmail.com",
-    icon: FiMail,
-    description: "jefersonpinho.dev@gmail.com",
   },
 ];
 
+const containerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
 export function ContactSection() {
   const { ref, isInView } = useRevealAnimation();
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("loading");
-
-    await new Promise((r) => setTimeout(r, 1500));
-    setStatus("success");
-
-    setTimeout(() => {
-      setStatus("idle");
-      setFormState({ name: "", email: "", message: "" });
-    }, 3000);
-  };
 
   return (
-    <section id="contact" className="py-24 lg:py-32">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="py-24 lg:py-28"
+    >
       <Container>
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
         >
-          <div className="mb-4 flex items-center gap-3">
-            <span className="h-px w-12 bg-primary" />
-            <span className="font-mono text-sm text-primary">06. Contato</span>
-          </div>
+          <motion.div
+            variants={itemVariants}
+            className="mb-4 flex items-center gap-3"
+          >
+            <span aria-hidden="true" className="h-px w-12 bg-primary" />
 
-          <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr]">
-            <div>
-              <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-                Vamos contruir algo
-                <span className="text-primary"> grandioso</span>.
+            <span className="font-mono text-sm font-medium text-primary">
+              05. Contato
+            </span>
+          </motion.div>
+
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+            <motion.div variants={itemVariants}>
+              <h2
+                id="contact-title"
+                className="max-w-2xl font-display text-4xl font-bold tracking-tight sm:text-5xl"
+              >
+                Vamos conversar sobre uma{" "}
+                <span className="text-primary">oportunidade ou projeto.</span>
               </h2>
-              <p className="mt-6 leading-relaxed text-muted-foreground">
-                Tem um projeto em mente ou quer discutir uma oportunidade?
-                Envie-me uma mensagem e entrarei em contato com você em até 24
-                horas.
+
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                Estou disponível para oportunidades profissionais, projetos
+                freelance e parcerias. Entre em contato para apresentar o
+                contexto, os objetivos e como posso contribuir.
               </p>
 
-              <div className="mt-10 flex flex-col gap-4">
-                {socialLinks.map(({ label, href, icon: Icon, description }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-4 rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/30 hover:shadow-md"
-                  >
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Icon size={18} />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
-                        {label}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {description}
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-card p-8">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-2 block text-sm font-medium text-foreground"
-                    >
-                      Nome
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      required
-                      value={formState.name}
-                      onChange={(e) =>
-                        setFormState((s) => ({ ...s, name: e.target.value }))
-                      }
-                      placeholder="Seu nome"
-                      className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="mb-2 block text-sm font-medium text-foreground"
-                    >
-                      E-mail
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      required
-                      value={formState.email}
-                      onChange={(e) =>
-                        setFormState((s) => ({ ...s, email: e.target.value }))
-                      }
-                      placeholder="seuemail@exemplo.com"
-                      className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                    />
-                  </div>
+              <div className="mt-8 flex items-start gap-3 text-sm text-muted-foreground">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FiMapPin size={17} aria-hidden="true" />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="mb-2 block text-sm font-medium text-foreground"
-                  >
-                    Mensagem
-                  </label>
-                  <textarea
-                    id="message"
-                    required
-                    rows={6}
-                    value={formState.message}
-                    onChange={(e) =>
-                      setFormState((s) => ({ ...s, message: e.target.value }))
-                    }
-                    placeholder="Conte-me sobre seu projeto..."
-                    className="w-full resize-none rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                  />
-                </div>
+                  <span className="block font-medium text-foreground">
+                    Maracanaú, Ceará
+                  </span>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={status === "loading" || status === "success"}
-                  className="w-full sm:w-auto"
+                  <span className="mt-1 block">
+                    Disponível para oportunidades remotas e presenciais.
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                <a
+                  href="mailto:jefersonpinho.dev@gmail.com?subject=Contato pelo portfólio"
+                  className="group inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4"
                 >
-                  {status === "loading" ? (
-                    <>
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                      Enviando...
-                    </>
-                  ) : status === "success" ? (
-                    <>
-                      <FiCheck size={16} />
-                      Mensagem enviada!
-                    </>
-                  ) : (
-                    <>
-                      <FiSend size={16} />
-                      Enviar Mensagem
-                    </>
-                  )}
-                </Button>
-              </form>
-            </div>
+                  Enviar um e-mail
+                  <FiArrowUpRight
+                    size={16}
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </a>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={containerVariants}
+              className="grid gap-4 sm:grid-cols-2"
+            >
+              {contactLinks.map(({ label, value, href, icon: Icon }) => {
+                const isEmail = href.startsWith("mailto:");
+
+                return (
+                  <motion.a
+                    key={label}
+                    variants={itemVariants}
+                    href={href}
+                    target={isEmail ? undefined : "_blank"}
+                    rel={isEmail ? undefined : "noopener noreferrer"}
+                    aria-label={`${label}: ${value}`}
+                    className="group flex min-h-36 flex-col justify-between rounded-2xl border border-border/70 bg-card/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-card hover:shadow-lg hover:shadow-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+                        <Icon size={18} aria-hidden="true" />
+                      </div>
+
+                      <FiArrowUpRight
+                        size={17}
+                        aria-hidden="true"
+                        className="text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                      />
+                    </div>
+
+                    <div className="mt-6">
+                      <span className="block text-sm font-semibold text-foreground">
+                        {label}
+                      </span>
+
+                      <span className="mt-1 block break-all text-sm text-muted-foreground">
+                        {value}
+                      </span>
+                    </div>
+                  </motion.a>
+                );
+              })}
+            </motion.div>
           </div>
         </motion.div>
       </Container>
